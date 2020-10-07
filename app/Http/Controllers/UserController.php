@@ -11,7 +11,7 @@ class UserController extends Controller
 {
 	/**
  * @OA\Post(
- * path="/login",
+ * path="/api/login",
  * summary="Sign in",
  * description="Login by email, password",
  * operationId="authLogin",
@@ -29,7 +29,9 @@ class UserController extends Controller
 *     response=200,
 *     description="Success",
 *     @OA\JsonContent(
-*        @OA\Property(property="user", type="object", ref="#/components/schemas/User"),
+*        @OA\Property(property="access_token", type="string", example="jwt_token"),
+*        @OA\Property(property="token_type", type="string", example="bearer"),
+*        @OA\Property(property="expires_in", type="integer", example="3600"),
 *     )
 *  ),
  * @OA\Response(

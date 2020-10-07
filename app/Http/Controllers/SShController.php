@@ -6,7 +6,7 @@ namespace App\Http\Controllers;
 
 class SShController extends Controller
 {
-    public function connect ()
+    public function connect (): string
     {
         $ssh2 = ssh2_connect('157.230.54.176', '22');
         ssh2_auth_password ( $ssh2 , 'master_xhuuzsvrtw' , 'ZD~EaMI$IdsFIF7I' );
