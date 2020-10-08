@@ -13,12 +13,20 @@ class CloudwaysController extends Controller
 		$this->getApiToken();
 	}
 
+	/**
+	* [index description]
+	* @return string [description]
+	*/
 	public function index(): string
 	{
 		$this->getApiToken();
 		return $this->cw_token_details;
 	}
 
+	/**
+	* [getServerList description]
+	* @return string [description]
+	*/
 	public function getServerList(): string
 	{
 		$this->getApiToken();
@@ -32,6 +40,11 @@ class CloudwaysController extends Controller
 		return $response->json();
 	}
 
+	/**
+	* [getServerDiscUsage description]
+	* @param  boolean $server_id [description]
+	* @return string             [description]
+	*/
 	public function getServerDiscUsage($server_id = false): string
 	{
 		if(!$server_id){
@@ -50,7 +63,7 @@ class CloudwaysController extends Controller
 		// dd($headers);
 		$response = Http::withHeaders($headers)->get($url);
 		$operation = $response->json();
-// 		return $operation;
+		// 		return $operation;
 		if(!$operation['status']){
 			$response = [
 				'status' => Response::HTTP_INTERNAL_SERVER_ERROR,
@@ -62,6 +75,11 @@ class CloudwaysController extends Controller
 		return $response_operation;
 	}
 
+	/**
+	* [checkOperationStatus description]
+	* @param  boolean $operation_id [description]
+	* @return string                [description]
+	*/
 	public function checkOperationStatus($operation_id=false): string
 	{
 		if(!$operation_id){
@@ -82,6 +100,12 @@ class CloudwaysController extends Controller
 		# code...4475815
 	}
 
+	/**
+	* [getOperationStatus description]
+	* @param  [type] $headers [description]
+	* @param  [type] $id      [description]
+	* @return string          [description]
+	*/
 	private function getOperationStatus($headers, $id): string
 	{
 		$url = 'https://api.cloudways.com/api/v1/operation/' . $id;
@@ -89,6 +113,9 @@ class CloudwaysController extends Controller
 		return $response->json();
 	}
 
+	/**
+	* [getApiToken description]
+	*/
 	private function getApiToken(): void
 	{
 		$url = 'https://api.cloudways.com/api/v1/oauth/access_token';

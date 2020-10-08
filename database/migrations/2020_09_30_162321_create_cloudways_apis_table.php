@@ -18,8 +18,8 @@ class CreateCloudwaysApisTable extends Migration
             $table->text('url');
             $table->text('name');
             $table->text('key');
-            $table->dateTime('created_at')->default('current_timestamp()');
-            $table->dateTime('updated_at')->default('current_timestamp() on update current_timestamp()');
+            $table->dateTime('created_at')->default(\DB::raw('CURRENT_TIMESTAMP'));
+            $table->dateTime('updated_at')->default(\DB::raw('CURRENT_TIMESTAMP on update CURRENT_TIMESTAMP'));
             $table->dateTime('deleted_at');
         });
     }
