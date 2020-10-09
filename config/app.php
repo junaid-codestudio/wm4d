@@ -165,8 +165,8 @@ return [
 		/*
 		 * Package Service Providers...
 		 */
-		Ejarnutowski\LaravelApiKey\Providers\ApiKeyServiceProvider::class,
-		Tymon\JWTAuth\Providers\LaravelServiceProvider::class,
+		// Ejarnutowski\LaravelApiKey\Providers\ApiKeyServiceProvider::class,
+		// Tymon\JWTAuth\Providers\LaravelServiceProvider::class,
 //        Barryvdh\LaravelIdeHelper\IdeHelperServiceProvider::class,
 
 		/*
