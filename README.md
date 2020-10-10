@@ -1,6 +1,6 @@
-<title>
+<h1>
 	WM4D (Web Marketing for Dentists) - Monitoring Tool
-</title>
+</h1>
 
 To run the application, use the following steps
 
