@@ -100,7 +100,7 @@ class ClientsController extends Controller
 		$data = $data['result'];
 		try {
 			$existing_ids = array();
-			foreach ( $data as $k=>$v )
+			foreach ( $data as $k )
 			{
 				$data[$k] ['marchex_id'] = $data[$k] ['acct'];
 				unset($data[$k]['acct']);
