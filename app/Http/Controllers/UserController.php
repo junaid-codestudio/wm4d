@@ -6,43 +6,44 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
 use Symfony\Component\HttpFoundation\Response;
 use Tymon\JWTAuth\Exceptions\JWTException;
+use App\Models\User;
 
 class UserController extends Controller
 {
 	/**
- * @OA\Post(
- * path="/api/login",
- * summary="Sign in",
- * description="Login by email, password",
- * operationId="authLogin",
- * tags={"auth"},
- * @OA\RequestBody(
- *    required=true,
- *    description="Pass user credentials",
- *    @OA\JsonContent(
- *       required={"email","password"},
- *       @OA\Property(property="email", type="string", format="email", example="user1@mail.com"),
- *       @OA\Property(property="password", type="string", format="password", example="PassWord12345"),
- *    ),
- * ),
- * @OA\Response(
-*     response=200,
-*     description="Success",
-*     @OA\JsonContent(
-*        @OA\Property(property="access_token", type="string", example="jwt_token"),
-*        @OA\Property(property="token_type", type="string", example="bearer"),
-*        @OA\Property(property="expires_in", type="integer", example="3600"),
-*     )
-*  ),
- * @OA\Response(
- *    response=422,
- *    description="Wrong credentials response",
- *    @OA\JsonContent(
- *       @OA\Property(property="message", type="string", example="Sorry, wrong email address or password. Please try again")
- *        )
- *     )
- * )
- */
+	* @OA\Post(
+	* path="/api/login",
+	* summary="Sign in",
+	* description="Login by email, password",
+	* operationId="authLogin",
+	* tags={"auth"},
+	* @OA\RequestBody(
+	*    required=true,
+	*    description="Pass user credentials",
+	*    @OA\JsonContent(
+	*       required={"email","password"},
+	*       @OA\Property(property="email", type="string", format="email", example="user1@mail.com"),
+	*       @OA\Property(property="password", type="string", format="password", example="PassWord12345"),
+	*    ),
+	* ),
+	* @OA\Response(
+	*     response=200,
+	*     description="Success",
+	*     @OA\JsonContent(
+	*        @OA\Property(property="access_token", type="string", example="jwt_token"),
+	*        @OA\Property(property="token_type", type="string", example="bearer"),
+	*        @OA\Property(property="expires_in", type="integer", example="3600"),
+	*     )
+	*  ),
+	* @OA\Response(
+	*    response=422,
+	*    description="Wrong credentials response",
+	*    @OA\JsonContent(
+	*       @OA\Property(property="message", type="string", example="Sorry, wrong email address or password. Please try again")
+	*        )
+	*     )
+	* )
+	*/
 	public function login(Request $request)
 	{
 		$credentials = [];
@@ -64,21 +65,28 @@ class UserController extends Controller
 			'email' => $data['email'],
 			'password' => $data['password']
 		];
-
+		/*
 		if (!$token = auth('api')->attempt($credentials)) {
-      // if the credentials are wrong we send an unauthorized error in json format
-			return response()->json(['error' => 'Unauthorized'], 401);
-		}
-		return response()->json([
-			'access_token' => $token,
-			'token_type' => 'bearer',
-			'expires_in' => auth('api')->factory()->getTTL() * 60
-		]);
+		// if the credentials are wrong we send an unauthorized error in json format
+		return response()->json(['error' => 'Unauthorized'], 401);
+	}
+	*/
+	$user = User::where('email', $credentials['email'])->first();
 
+	if (! $user || ! Hash::check($credentials['password'], $user->password)) {
+		return response()->json(['message' => 'Unauthorized'], 401);
 	}
 
-	public function refresh()
-	{
-		return $this->respondWithToken(auth('api')->refresh());
-	}
+	return response()->json([
+		'access_token' => $user->createAccessToken($user),
+		'token_type' => 'Bearer',
+		'user' => $user
+	]);
+
+}
+
+public function refresh()
+{
+	return $this->respondWithToken(auth('api')->refresh());
+}
 }

@@ -27,3 +27,9 @@ Route::middleware('jwt.auth')->group(function() {
 		echo 'here';
 	});
 });
+
+Route::middleware('auth:sanctum')->group(function() {
+	Route::get("auth", function(){
+		echo 'sanctum';
+	});
+});
