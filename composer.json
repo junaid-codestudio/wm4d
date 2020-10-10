@@ -13,13 +13,14 @@
         "ext-ssh2": "*",
         "aws/aws-sdk-php": "^3.157",
         "darkaonline/l5-swagger": "^8.0",
-        "ejarnutowski/laravel-api-key": "^1.0",
         "fideloper/proxy": "^4.2",
         "fruitcake/laravel-cors": "^2.0",
         "guzzlehttp/guzzle": "^7.0.1",
         "laravel/framework": "^8.0",
         "laravel/tinker": "^2.0",
-        "tymon/jwt-auth": "^1.0"
+        "ejarnutowski/laravel-api-key": "^1.0",
+        "tymon/jwt-auth": "1.0.*",
+        "laravel/sanctum": "^2.6"
     },
     "require-dev": {
         "barryvdh/laravel-ide-helper": "^2.8",
