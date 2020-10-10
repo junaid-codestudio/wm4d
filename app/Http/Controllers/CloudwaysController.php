@@ -27,7 +27,7 @@ class CloudwaysController extends Controller
 	* [getServerList description]
 	* @return string [description]
 	*/
-	public function getServerList(): string
+	public function getServerList(): array
 	{
 		$this->getApiToken();
 		// $this->cw_token_details['access_token'] = 'EJEcrKzyTVVqGvGCcnyJlV4XWvFmOtV1i9ArCJhw';
@@ -38,41 +38,6 @@ class CloudwaysController extends Controller
 		// dd($headers);
 		$response = Http::withHeaders($headers)->get($url);
 		return $response->json();
-	}
-
-	/**
-	* [getServerDiscUsage description]
-	* @param  boolean $server_id [description]
-	* @return string             [description]
-	*/
-	public function getServerDiscUsage($server_id = false): string
-	{
-		if(!$server_id){
-			$response = [
-				'status' => Response::HTTP_METHOD_NOT_ALLOWED,
-				'message' => __('Please provide correct server id')
-			];
-			return response()->json($response);
-		}
-		$this->getApiToken();
-		$url = 'https://api.cloudways.com/api/v1/server/' . $server_id . '/diskUsage';
-		// return $url;
-		$headers = [
-			'Authorization' => 'Bearer ' . $this->cw_token_details['access_token']
-		];
-		// dd($headers);
-		$response = Http::withHeaders($headers)->get($url);
-		$operation = $response->json();
-		// 		return $operation;
-		if(!$operation['status']){
-			$response = [
-				'status' => Response::HTTP_INTERNAL_SERVER_ERROR,
-				'message' => __('Please provide correct server id')
-			];
-			return response()->json($response);
-		}
-		$response_operation = $this->getOperationStatus($headers, $operation['operation_id']);
-		return $response_operation;
 	}
 
 	/**
@@ -102,8 +67,8 @@ class CloudwaysController extends Controller
 
 	/**
 	* [getOperationStatus description]
-	* @param  [type] $headers [description]
-	* @param  [type] $id      [description]
+	* @param  string $headers [description]
+	* @param  int $id      [description]
 	* @return string          [description]
 	*/
 	private function getOperationStatus($headers, $id): string
@@ -119,9 +84,13 @@ class CloudwaysController extends Controller
 	private function getApiToken(): void
 	{
 		$url = 'https://api.cloudways.com/api/v1/oauth/access_token';
-		$body = [
+		/* $body = [
 			'email' => 'root@wm4d.com',
 			'api_key' => 'KzSuDaeNKJaQ8OU2IeK06Ad6R6pioZ'
+		]; */
+		$body = [
+			'email' => env('CW_API_EMAIL'),
+			'api_key' => env('CW_API_TOKEN')
 		];
 		$response = Http::post($url, $body);
 		$this->cw_token_details = $response->json();

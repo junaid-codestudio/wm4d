@@ -5,7 +5,6 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
 use Symfony\Component\HttpFoundation\Response;
-use Tymon\JWTAuth\Exceptions\JWTException;
 
 class UserController extends Controller
 {
@@ -43,7 +42,7 @@ class UserController extends Controller
  *     )
  * )
  */
-	public function login(Request $request)
+	public function login(Request $request): string
 	{
 		$credentials = [];
 		$data =  $request->all();
@@ -59,14 +58,19 @@ class UserController extends Controller
 			];
 			return response()->json($response);
 		}
-		// dd($validation_status->fails());
+		
 		$credentials = [
 			'email' => $data['email'],
 			'password' => $data['password']
 		];
+		
+		try {
+		    $token = auth('api')->attempt($credentials);
+		} catch (\Exception $e) {
+		    $token = false;
+		}
 
-		if (!$token = auth('api')->attempt($credentials)) {
-      // if the credentials are wrong we send an unauthorized error in json format
+		if (!$token) {
 			return response()->json(['error' => 'Unauthorized'], 401);
 		}
 		return response()->json([
