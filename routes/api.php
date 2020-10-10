@@ -38,6 +38,7 @@ Route::middleware('auth.publicapikey')->group(function() {
 		echo 'here';
 	});
 }); */
+
 Route::middleware('auth:sanctum')->group(function() {
 	Route::get("auth", function(){
 		echo 'sanctum';

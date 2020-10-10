@@ -65,28 +65,22 @@ class UserController extends Controller
 			'email' => $data['email'],
 			'password' => $data['password']
 		];
-		/*
-		if (!$token = auth('api')->attempt($credentials)) {
-		// if the credentials are wrong we send an unauthorized error in json format
-		return response()->json(['error' => 'Unauthorized'], 401);
+		$user = User::where('email', $credentials['email'])->first();
+
+		if (! $user || ! Hash::check($credentials['password'], $user->password)) {
+			return response()->json(['message' => 'Unauthorized'], 401);
+		}
+
+		return response()->json([
+			'access_token' => $user->createAccessToken($user),
+			'token_type' => 'Bearer',
+			'user' => $user
+		]);
+
 	}
-	*/
-	$user = User::where('email', $credentials['email'])->first();
 
-	if (! $user || ! Hash::check($credentials['password'], $user->password)) {
-		return response()->json(['message' => 'Unauthorized'], 401);
+	public function refresh()
+	{
+		return $this->respondWithToken(auth('api')->refresh());
 	}
-
-	return response()->json([
-		'access_token' => $user->createAccessToken($user),
-		'token_type' => 'Bearer',
-		'user' => $user
-	]);
-
-}
-
-public function refresh()
-{
-	return $this->respondWithToken(auth('api')->refresh());
-}
 }
