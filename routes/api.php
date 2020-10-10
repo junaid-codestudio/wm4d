@@ -32,6 +32,15 @@ Route::middleware('auth.publicapikey')->group(function() {
 	Route::post('update_client', 'App\Http\Controllers\ClientsController@update')->name('clients.update');
 	Route::get('delete_client/{client_id?}', 'App\Http\Controllers\ClientsController@delete')->name('clients.delete');
 	Route::get('restore_client/{client_id?}', 'App\Http\Controllers\ClientsController@restore')->name('clients.restore');
+
+	/* cloudways apis */
+	Route::post('add_application', 'App\Http\Controllers\CloudwaysController@addApp')->name('add.app');
+	Route::post('clone_application', 'App\Http\Controllers\CloudwaysController@cloneApp')->name('clone.app');
+	Route::post('clone_application_to_other_server', 'App\Http\Controllers\CloudwaysController@cloneToOtherServer')->name('clone.app.to.other.server');
+	Route::post('clone_staging_app', 'App\Http\Controllers\CloudwaysController@cloneStagingApp')->name('clone.staging.app');
+	Route::post('clone_staging_application_to_other_server', 'App\Http\Controllers\CloudwaysController@cloneStagingAppToOtherServer')->name('clone.staging.app.to.other.server');
+	Route::post('delete_application', 'App\Http\Controllers\CloudwaysController@deleteApp')->name('delete.app');
+	Route::post('update_application_lable', 'App\Http\Controllers\CloudwaysController@updateAppLable')->name('update.app.lable');
 });
 /* Route::middleware('jwt.auth')->group(function() {
 	Route::get("auth", function(){
