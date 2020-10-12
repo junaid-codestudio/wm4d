@@ -69,12 +69,14 @@ class ClientsController extends Controller
 		try {
 			$response = Http::withHeaders($this->getHeaders())->post($url, $body);
 			$res = $response->json();
+			// return $res;
 			if(!$res){
 				$res = [
 					'status' => 404,
 					'response' => $response
 				];
 			} else {
+				// return $res;
 				$isSaved = $this->saveAccountsInDb($res);
 				$res = [
 					'status' => 200,
@@ -100,7 +102,7 @@ class ClientsController extends Controller
 		$data = $data['result'];
 		try {
 			$existing_ids = array();
-			foreach ( $data as $k )
+			foreach ( $data as $k => $v )
 			{
 				$data[$k] ['marchex_id'] = $data[$k] ['acct'];
 				unset($data[$k]['acct']);
@@ -121,7 +123,7 @@ class ClientsController extends Controller
 			}
 			return count($not_existing);
 		} catch (\Exception $e) {
-			// return $e->getMessage();
+			// dd($e->getMessage());
 			return 0;
 		}
 		return 0;

@@ -17,9 +17,25 @@ use Illuminate\Support\Facades\Route;
 Route::middleware('auth.publicapikey')->group(function() {
 	Route::post("login", "\App\Http\Controllers\UserController@login")->name('login');
 	Route::get('ssh_conn', 'App\Http\Controllers\SShController@connect');
+
+	/* Cloudways API Management */
 	Route::get('get_api_token', 'App\Http\Controllers\CloudwaysController@index');
-	Route::get('get_server_list', 'App\Http\Controllers\CloudwaysController@getServerList');
 	Route::get('check_operation_status/{operation_id?}', 'App\Http\Controllers\CloudwaysController@checkOperationStatus');
+
+	/* Server Management Operations */
+	Route::get('get_server_list', 'App\Http\Controllers\ServerManagementController@getServerList')->name('server.list');
+	Route::post('get_server_resource_consumption', 'App\Http\Controllers\ServerManagementController@getMonitoringGraph')->name('server.monitoringgraph');
+
+	/* Site Management Operations */
+	Route::get('get_site_list/{server_id?}', 'App\Http\Controllers\SiteManagementController@getSitesList')->name('sites.list');
+	Route::post('add_application', 'App\Http\Controllers\SiteManagementController@addApp')->name('add.app');
+	Route::post('clone_application', 'App\Http\Controllers\SiteManagementController@cloneApp')->name('clone.app');
+	Route::post('clone_application_to_other_server', 'App\Http\Controllers\SiteManagementController@cloneToOtherServer')->name('clone.app.to.other.server');
+	Route::post('clone_staging_app', 'App\Http\Controllers\SiteManagementController@cloneStagingApp')->name('clone.staging.app');
+	Route::post('clone_staging_application_to_other_server', 'App\Http\Controllers\SiteManagementController@cloneStagingAppToOtherServer')->name('clone.staging.app.to.other.server');
+	Route::post('delete_application', 'App\Http\Controllers\SiteManagementController@deleteApp')->name('delete.app');
+	Route::post('update_application_label', 'App\Http\Controllers\SiteManagementController@updateAppLabel')->name('update.app.label');
+	// Route::post('get_server_resource_consumption', 'App\Http\Controllers\ServerManagementController@getMonitoringGraph')->name('server.monitoringgraph');
 
 	/* clients operations */
 	Route::get('save_accounts_list', 'App\Http\Controllers\ClientsController@saveMarchexAccountsList')->name('clients.acct.list.save');
