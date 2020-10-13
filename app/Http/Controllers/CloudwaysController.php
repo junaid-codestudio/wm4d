@@ -8,10 +8,21 @@ use Illuminate\Http\Request;
 
 class CloudwaysController extends Controller
 {
-	private $cw_token_details;
+	protected $cw_token_details;
 	function __construct()
 	{
-		$this->getApiToken();
+		try {	
+			$this->getApiToken();
+			$token = $this->cw_token_details['access_token'];
+		} catch (\Exception $e) {
+			$res = [
+				'status' => 500,
+				'message' => 'Some Error Occured. Please try again!',
+				'error' => $e->getMessage(),
+				'data' => []
+			];
+			return $res;
+		}
 	}
 
 	/**
@@ -22,23 +33,6 @@ class CloudwaysController extends Controller
 	{
 		$this->getApiToken();
 		return $this->cw_token_details;
-	}
-
-	/**
-	* [getServerList description]
-	* @return string [description]
-	*/
-	public function getServerList(): array
-	{
-		$this->getApiToken();
-		// $this->cw_token_details['access_token'] = 'EJEcrKzyTVVqGvGCcnyJlV4XWvFmOtV1i9ArCJhw';
-		$url = 'https://api.cloudways.com/api/v1/server';
-		$headers = [
-			'Authorization' => 'Bearer ' . $this->cw_token_details['access_token']
-		];
-		// dd($headers);
-		$response = Http::withHeaders($headers)->get($url);
-		return $response->json();
 	}
 
 	/**
@@ -82,7 +76,7 @@ class CloudwaysController extends Controller
 	/**
 	* [getApiToken description]
 	*/
-	private function getApiToken(): void
+	protected function getApiToken(): void
 	{
 		$url = 'https://api.cloudways.com/api/v1/oauth/access_token';
 		/* $body = [
