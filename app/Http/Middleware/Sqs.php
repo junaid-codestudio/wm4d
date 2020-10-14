@@ -25,7 +25,7 @@ class Sqs
     $app = app();
     $controller = $app->make('\App\Http\Controllers\\'. $controller );
 
-    return $controller->callAction($path, $parameters = array());
+    return $controller->callAction($path, $parameters = [$request]);
 
     // return $next($request);
   }

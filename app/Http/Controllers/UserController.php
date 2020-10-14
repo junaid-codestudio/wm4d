@@ -7,6 +7,7 @@ use Illuminate\Support\Facades\Validator;
 use Symfony\Component\HttpFoundation\Response;
 use Tymon\JWTAuth\Exceptions\JWTException;
 use App\Models\User;
+use Hash;
 
 class UserController extends Controller
 {
@@ -48,6 +49,7 @@ class UserController extends Controller
 	{
 		$credentials = [];
 		$data =  $request->all();
+
 		$rules = [
 			'email' => 'required|max:255',
 			'password' => 'required|max:255'
@@ -65,6 +67,7 @@ class UserController extends Controller
 			'email' => $data['email'],
 			'password' => $data['password']
 		];
+
 		$user = User::where('email', $credentials['email'])->first();
 
 		if (! $user || ! Hash::check($credentials['password'], $user->password)) {

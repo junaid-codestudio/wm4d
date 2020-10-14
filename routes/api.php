@@ -70,7 +70,7 @@ Route::middleware('auth:sanctum')->group(function() {
 	});
 });
 
-Route::middleware('sqs')->group(function() {
+Route::middleware(['auth:sanctum','sqs'])->group(function() {
 	Route::any("test-sqs", "\App\Http\Controllers\SqsController@test")->name('test');
 });
 Route::any("get-sqs", "\App\Http\Controllers\SqsController@getQueueInfo")->name('getQueueInfo');
