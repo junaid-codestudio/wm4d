@@ -18,8 +18,16 @@ class SqsController extends Controller
 	* [getServerList description]
 	* @return string [description]
 	*/
-	public function test(Request $request)
+	public function test(Request $request,$response='')
 	{
+		if($response['status'] == 'in_process'){
+			return response()->json(['code'=>200,'status'=>'in_process']);
+		}elseif ($response['status'] == 'failed' || $response['status'] == 'no_job_found') {
+			//
+		}elseif ($response['status'] == 'completed') {
+			return response()->json(['code'=>200,'status'=>'completed','data'=>json_decode($response['data'],true)]);
+		}
+
 		$user = auth()->user();
 		$class = 'App\Models\SqsM';
 		$method = 'testSqs';
